@@ -4,14 +4,25 @@ export default {
     return {
       item: '',
       list: [],
+      isErrorInput: false
     }
   },
   methods: {
     simpan() {
-      // validasi                               // ← TODO 3: tambah validasi input user, ketika user tidak menambahkan input dan langsung menekan tombol tambah, munncul peringatan untuk mengisi input
+      // validasi
+      if(this.item == '') {
+        this.isErrorInput = true
+      } else {
+        // fungsi simpan ke array
+        this.list.push(this.item)
+        
+        // reset inputbox
+        this.item = '';
 
-      // fungsi simpan ke array
-      this.list.push(this.item)
+        // remove error message
+        this.isErrorInput = false
+      }
+
     }
   },
   computed: {
@@ -26,15 +37,19 @@ export default {
 <template>
   <!-- list -->
   <ul>
-    <li v-for="(todo, index) in list" :key="index">{{ todo }}</li>      <!-- TODO 1: ubah ke urutan angka -->
+    <li v-for="(todo, index) in list" :key="index">{{ todo }}</li>
   </ul>
 
   <!-- input -->
   <input type="text" v-model="item">
   <button @click="simpan">Simpan</button>
-  <p>{{ list.length >= 4 ? 'Hebat' : '' }}</p>    <!-- TODO 2: ubah menggunakan computed -->
+  <p v-if="isErrorInput" class="text-error">Inputan tidak boleh kosong</p>
+  <p v-if="isMoreThanFour">{{ 'Hebat' }}</p>
 </template>
 
 <style scoped>
-
+.text-error {
+  background-color: red;
+  color: white;
+}
 </style>
